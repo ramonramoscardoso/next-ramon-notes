@@ -1,4 +1,8 @@
-Requisitos Funcionais
+# App
+
+Aplicativo de criação de cadernos de anotações para organização de suas atividades diárias
+
+## Requisitos Funcionais
 
 [x] Deve ser possível cadastrar um usuário
 [ ] Deve ser possível acessar os cadernos de um usuário
@@ -9,12 +13,12 @@ Requisitos Funcionais
 [ ] Deve ser possível deletar um caderno de anotação
 [ ] OPCIONAL: Deve ser possível determinar uma data e hora limite de execução de um caderno
 
-Requisitos Não Funcionais
+## Requisitos Não Funcionais
 
 [x] As anotações deverão ser guardadas no local storage do navegador 
 [ ] O app deverá ser responsivo
 
-Regras de Negócio
+## Regras de Negócio
 
 [ ] Podem ser cadastrados no máximo 5 usuários
 [ ] Um usuário não poderá ter o mesmo nome que o outro
