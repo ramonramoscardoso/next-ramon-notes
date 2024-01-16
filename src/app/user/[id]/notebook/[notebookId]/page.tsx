@@ -70,9 +70,9 @@ export default function NotebookPage({
     updateNotebookOnLocalStorage(notebook, params.id, params.notebookId)
   }
 
-  useEffect(() => {
-    console.log(notebook);
-  }, [notebook]);
+  // useEffect(() => {
+  //   console.log(notebook);
+  // }, [notebook]);
 
   return (
     <>

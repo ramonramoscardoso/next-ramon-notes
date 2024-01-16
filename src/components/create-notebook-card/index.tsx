@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { FormEvent, useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { saveNotebookOnLocalStorage } from "@/app/utils/local-storage";
+import { createId, saveNotebookOnLocalStorage } from "@/app/utils/local-storage";
 import { useRouter } from "next/navigation";
 
 interface CreateNotebookCardParams {
@@ -26,7 +26,7 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
     name: "",
     tasks: [],
     done: false,
-    id: 1,
+    id: createId(id),
   });
 
   const router = useRouter();
