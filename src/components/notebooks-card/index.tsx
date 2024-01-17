@@ -10,10 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
 
 interface NotebooksCardParams {
   id: string;
@@ -23,23 +20,51 @@ export function NotebooksCard({ id }: NotebooksCardParams) {
   const userData: LocalStorageUserData = getUserById(id);
   const router = useRouter();
 
+  function createTasksDetailsSection(
+    tasks: { description: string; done: boolean }[]
+  ) {
+    const finishedTasks = tasks.filter((task) => task.done);
+    const notFinishedTasksLength = tasks.length - finishedTasks.length;
+
+    return (
+      <div className="text-center">
+        <p>
+          {`${finishedTasks.length} ${
+            finishedTasks.length === 1
+              ? "anotação finalizada ✅"
+              : "anotações finalizadas ✅"
+          }`}
+        </p>
+        <p>
+          {`${notFinishedTasksLength} ${
+            notFinishedTasksLength === 1
+              ? "anotação não finalizada ❌"
+              : "anotações não finalizadas ❌"
+          }`}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
-      {userData && userData.notebooks.length && (
-        <>
+      {userData?.notebooks?.length > 0 && (
+        <div className="grid grid-cols-3 place-items-stretch">
           {userData.notebooks.map((notebook) => {
             return (
               <Card
-                className="w-[350px]"
+                className="w-[350px] flex flex-col items-center"
                 key={`${notebook.name}-notebook-card`}
               >
                 <CardHeader>
                   <CardTitle>{notebook.name}</CardTitle>
                 </CardHeader>
                 {notebook.tasks.length > 0 ? (
-                  <CardContent>{notebook.tasks.length} anotações</CardContent>
+                  <CardContent>
+                    {createTasksDetailsSection(notebook.tasks)}
+                  </CardContent>
                 ) : (
-                  <CardContent>Nenhuma anotação criada ainda</CardContent>
+                  <CardContent>Nenhuma anotação ainda 📋</CardContent>
                 )}
                 <CardFooter className="flex justify-between">
                   <Button
@@ -54,7 +79,7 @@ export function NotebooksCard({ id }: NotebooksCardParams) {
               </Card>
             );
           })}
-        </>
+        </div>
       )}
     </>
   );

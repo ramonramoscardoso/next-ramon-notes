@@ -48,12 +48,12 @@ export function UsersCard() {
   }
 
   return (
-    <div className="flex flex-col gap-20">
+    <div className="flex flex-col gap-10">
       {users && users.length > 0 && (
         <section className="flex flex-col gap-3">
           <h3 className="text-xl font-bold">Usuários</h3>
           <Separator />
-          <div className="flex gap-3 grid grid-cols-3">
+          <div className="grid grid-cols-3 place-items-stretch">
             {users.map((user) => {
               return (
                 <Card

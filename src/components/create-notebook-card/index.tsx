@@ -13,7 +13,10 @@ import { Input } from "@/components/ui/input";
 import { FormEvent, useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import { Badge } from "../ui/badge";
-import { createId, saveNotebookOnLocalStorage } from "@/app/utils/local-storage";
+import {
+  createId,
+  saveNotebookOnLocalStorage,
+} from "@/app/utils/local-storage";
 import { useRouter } from "next/navigation";
 
 interface CreateNotebookCardParams {
@@ -71,12 +74,12 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
 
   return (
     <>
-      <Card className="w-[350px]">
+      <Card className="w-[350px] flex flex-col items-center">
         <CardHeader>
           <CardTitle>Novo caderno de anotações</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleCreateNotebook}>
+          <form onSubmit={handleCreateNotebook} className="grid w-full items-center gap-4">
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <Input
@@ -110,15 +113,13 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
                 )}
               </div>
             </div>
-            <CardFooter className="flex justify-between">
-              <Button
-                variant="outline"
-                type="submit"
-                disabled={formValues.name ? false : true}
-              >
-                Criar
-              </Button>
-            </CardFooter>
+            <Button
+              variant="outline"
+              type="submit"
+              disabled={formValues.name ? false : true}
+            >
+              Criar
+            </Button>
           </form>
         </CardContent>
       </Card>

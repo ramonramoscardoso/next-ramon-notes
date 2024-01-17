@@ -101,14 +101,19 @@ export function createId(userId: string | null) {
 
   if (userId) {
     data = userNotebook(userId);
+
+    if (!data?.length) return 1;
+
     ids = data.map((notebook: Notebook) => notebook.id).sort();
   } else {
-    console.log("aaaa");
     data = getUsersDataInLocalStorage();
+
+    if (!data?.length) return 1;
+
     ids = data.map((user: LocalStorageUserData) => user.user.id).sort();
   }
 
-  if (data.length === 0) return 1;
+  
 
   return ids[ids.length - 1] + 1;
 }
