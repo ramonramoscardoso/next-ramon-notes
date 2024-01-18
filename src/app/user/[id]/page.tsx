@@ -42,7 +42,9 @@ export default function UserHomePage({ params }: { params: { id: string } }) {
       <div className="flex flex-col gap-10">
         {filterNotebooks("notFinished").length > 0 && (
           <section className="flex flex-col gap-3">
-            <h3 className="text-xl font-bold">Cadernos de anotação em progresso</h3>
+            <h3 className="text-xl font-bold">
+              Cadernos de anotação em progresso
+            </h3>
             <Separator />
             <NotebooksCard
               id={params.id}
@@ -53,7 +55,9 @@ export default function UserHomePage({ params }: { params: { id: string } }) {
 
         {filterNotebooks("finished").length > 0 && (
           <section className="flex flex-col gap-3">
-            <h3 className="text-xl font-bold">Cadernos de anotação finalizados</h3>
+            <h3 className="text-xl font-bold">
+              Cadernos de anotação finalizados
+            </h3>
             <Separator />
             <NotebooksCard
               id={params.id}
@@ -68,25 +72,13 @@ export default function UserHomePage({ params }: { params: { id: string } }) {
             Que tal criar um novo caderno de anotação?
           </h3>
           <Separator />
-          <CreateNotebookCard id={params.id} />
+          {filterNotebooks("notFinished").length < 10 ? (
+            <CreateNotebookCard id={params.id} />
+          ) : (
+            <>🚨 Máximo de 10 cadernos em execução atingido!</>
+          )}
         </section>
       </div>
     </div>
   );
-}
-
-{
-  /* <div className="flex flex-col px-10">
-<div className="mt-20 mb-20 text-center">
-  <h2 className="text-3xl font-bold mb-10">Bem-vindo ao Ramonotes!</h2>
-  <h4 className="font-thin">
-    Aqui, você poderá criar e gerenciar suas anotações de forma simples e
-    prática. Todos os dados que você adicionar aqui ficarão salvos
-    exclusivamente em seu navegador!
-  </h4>
-</div>
-<div>
-  <UsersCard />
-</div>
-</div> */
 }

@@ -34,6 +34,7 @@ export default function NotebookPage({
   const [notebook, setNotebook] = useState<Notebook>(
     userNotebook(params.id, params.notebookId)
   );
+  const [doneNotebook, setDoneNotebook] = useState<boolean>(notebook.done);
   const [editInput, setEditInput] = useState<EditInput | null>(null);
   const [newTaskInput, setNewTaskInput] = useState<string>("");
 
@@ -78,10 +79,15 @@ export default function NotebookPage({
     router.replace(`/user/${params.id}`);
   }
 
-  function handleFinishNotebook() {
-    updateNotebookOnLocalStorage({...notebook, done: true}, params.id, params.notebookId);
+  function handleFinishOrReopen(done: boolean) {
+    updateNotebookOnLocalStorage(
+      { ...notebook, done: done },
+      params.id,
+      params.notebookId
+    );
 
-    router.replace(`/user/${params.id}`);
+    if (done) router.replace(`/user/${params.id}`);
+    else setDoneNotebook(false);
   }
 
   return (
@@ -97,12 +103,16 @@ export default function NotebookPage({
             <CardContent className="flex flex-col gap-5">
               {notebook.tasks.map((task, index) => {
                 return (
-                  <div key={`task-${index}`} className="flex gap-5 items-center">
+                  <div
+                    key={`task-${index}`}
+                    className="flex gap-5 items-center"
+                  >
                     <Checkbox
                       checked={task.done}
                       onCheckedChange={(value: CheckedState) =>
                         handleCheckNote(index, value as boolean)
                       }
+                      disabled={doneNotebook}
                     />
                     <Input
                       value={task.description}
@@ -116,40 +126,60 @@ export default function NotebookPage({
                         <Check />
                       </Button>
                     ) : (
-                      <Button
-                        variant="outline"
-                        onClick={() =>
-                          setEditInput({ index, description: task.description })
-                        }
-                      >
-                        <PenLine />
-                      </Button>
+                      <>
+                        {!doneNotebook && (
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              setEditInput({
+                                index,
+                                description: task.description,
+                              })
+                            }
+                          >
+                            <PenLine />
+                          </Button>
+                        )}
+                      </>
                     )}
                   </div>
                 );
               })}
-              <div className="flex gap-5">
-                <Input
-                  id="task"
-                  placeholder="Digite uma nova tarefa"
-                  value={newTaskInput}
-                  onChange={(e) => setNewTaskInput(e.target.value)}
-                />
-                <Button
-                  variant={newTaskInput ? "default" : "outline"}
-                  disabled={newTaskInput ? false : true}
-                  onClick={handleCreateNewTask}
-                  type="button"
-                >
-                  <Check />
-                </Button>
-              </div>
+
+              {!doneNotebook && notebook.tasks.length < 10 && (
+                <div className="flex gap-5">
+                  <Input
+                    id="task"
+                    placeholder="Digite uma nova tarefa"
+                    value={newTaskInput}
+                    onChange={(e) => setNewTaskInput(e.target.value)}
+                  />
+                  <Button
+                    variant={newTaskInput ? "default" : "outline"}
+                    disabled={newTaskInput ? false : true}
+                    onClick={handleCreateNewTask}
+                    type="button"
+                  >
+                    <Check />
+                  </Button>
+                </div>
+              )}
             </CardContent>
             <CardFooter className="flex gap-3">
-              {getUnmarkedNotes().length === 0 && (
-                <Button onClick={handleFinishNotebook}>Finalizar Caderno de Anotações</Button>
+              {!doneNotebook ? (
+                <>
+                  {getUnmarkedNotes().length === 0 && (
+                    <Button onClick={() => handleFinishOrReopen(true)}>
+                      Finalizar Caderno de Anotações
+                    </Button>
+                  )}
+                  <Button onClick={handleSaveChanges}>Salvar alterações</Button>
+                </>
+              ) : (
+                <Button onClick={() => handleFinishOrReopen(false)}>
+                  Reabrir caderno
+                </Button>
               )}
-              <Button onClick={handleSaveChanges}>Salvar alterações</Button>
             </CardFooter>
           </Card>
         </div>

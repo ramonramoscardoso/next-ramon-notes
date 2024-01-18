@@ -18,10 +18,13 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
+import { Trash2 } from "lucide-react";
 
 export function UsersCard() {
   const [formValues, setFormValues] = useState<User>();
   const [users, setUsers] = useState<LocalStorageUserData[]>();
+  const [userDeleteId, setUserDeleteId] = useState<number | null>(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -52,51 +55,130 @@ export function UsersCard() {
     window.location.reload();
   }
 
+  function userCard(user: LocalStorageUserData) {
+    return (
+      <Card
+        className="w-[350px] flex flex-col items-center"
+        key={`${user.user.name}-login-card`}
+      >
+        <div className="w-full flex justify-end h-0">
+          <Button
+            variant="ghost"
+            onClick={() => setUserDeleteId(user.user.id as number)}
+          >
+            <Trash2 size={15} />
+          </Button>
+        </div>
+        <CardHeader>
+          <CardTitle>{user.user.name}</CardTitle>
+        </CardHeader>
+        {user.notebooks.length === 0 ? (
+          <CardContent>Nenhum caderno criado ainda</CardContent>
+        ) : (
+          <CardContent>
+            {`${user.notebooks.length} ${
+              user.notebooks.length === 1 ? "caderno" : "cadernos"
+            } `}
+          </CardContent>
+        )}
+
+        <CardFooter className="flex justify-between">
+          <Button
+            variant="outline"
+            onClick={() => {
+              router.push(`/user/${user.user.id}`);
+            }}
+          >
+            Acessar
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  }
+
+  function userDeleteCard(user: LocalStorageUserData) {
+    return (
+      <Card
+        className="w-[350px] flex flex-col items-center bg-rose-700"
+        key={`${user.user.name}-login-card`}
+      >
+        <CardHeader>
+          Tem certeza que deseja deletar o usuário {user.user.name}?
+        </CardHeader>
+
+        <CardFooter className="flex w-full justify-between">
+          <Button
+            variant="outline"
+            className="bg-transparent"
+            onClick={() => handleDeleteUser(user.user.id as number)}
+          >
+            Sim
+          </Button>
+          <Button
+            variant="outline"
+            className="bg-transparent"
+            onClick={() => setUserDeleteId(null)}
+          >
+            Cancelar
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  }
+
+  function newUserSection() {
+    const users = getUsersDataInLocalStorage();
+
+    return (
+      <>
+        {!users || users?.length < 5 ? (
+          <Card className="w-[500px] flex flex-col items-center">
+            <CardHeader>
+              <CardTitle>Criar novo usuário</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form
+                onSubmit={handleCreateUser}
+                className="grid w-full items-center gap-4"
+              >
+                <div className="flex flex-col space-y-1.5">
+                  <Input
+                    id="name"
+                    placeholder="Nome do usuário"
+                    onChange={handleChange}
+                  />
+                </div>
+                <Button variant="outline" type="submit">
+                  Criar
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        ) : (
+          <>
+            🚨 Máximo de 5 usuários atingido! 
+          </>
+        )}
+      </>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-10">
       {users && users.length > 0 && (
         <section className="flex flex-col gap-3">
           <h3 className="text-xl font-bold">Usuários</h3>
           <Separator />
-          <div className="grid grid-cols-3 place-items-stretch">
+          <div className="grid grid-cols-3 gap-5 place-items-center">
             {users.map((user) => {
               return (
-                <Card
-                  className="w-[350px] flex flex-col items-center"
-                  key={`${user.user.name}-login-card`}
-                >
-                  <div className="w-full flex justify-end h-0">
-                    <Button
-                      variant="ghost"
-                      onClick={() => handleDeleteUser(user.user.id as number)}
-                    >
-                      x
-                    </Button>
-                  </div>
-                  <CardHeader>
-                    <CardTitle>{user.user.name}</CardTitle>
-                  </CardHeader>
-                  {user.notebooks.length === 0 ? (
-                    <CardContent>Nenhum caderno criado ainda</CardContent>
+                <div key={`user-${user.user.id}`}>
+                  {userDeleteId && userDeleteId === user.user.id ? (
+                    <>{userDeleteCard(user)}</>
                   ) : (
-                    <CardContent>
-                      {`${user.notebooks.length} ${
-                        user.notebooks.length === 1 ? "caderno" : "cadernos"
-                      } `}
-                    </CardContent>
+                    <>{userCard(user)}</>
                   )}
-
-                  <CardFooter className="flex justify-between">
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        router.push(`/user/${user.user.id}`);
-                      }}
-                    >
-                      Acessar
-                    </Button>
-                  </CardFooter>
-                </Card>
+                </div>
               );
             })}
           </div>
@@ -104,30 +186,9 @@ export function UsersCard() {
       )}
 
       <section className="flex flex-col gap-3">
-        <h3 className="text-xl font-bold">Novo por aqui?</h3>
+        <h3 className="text-xl font-bold">Deseja criar um novo usuário?</h3>
         <Separator />
-        <Card className="w-[350px] flex flex-col items-center">
-          <CardHeader>
-            <CardTitle>Criar novo usuário</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form
-              onSubmit={handleCreateUser}
-              className="grid w-full items-center gap-4"
-            >
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  id="name"
-                  placeholder="Nome do usuário"
-                  onChange={handleChange}
-                />
-              </div>
-              <Button variant="outline" type="submit">
-                Criar
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+        {newUserSection()}
       </section>
     </div>
   );

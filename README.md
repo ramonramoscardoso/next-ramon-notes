@@ -5,12 +5,12 @@ Aplicativo de criação de cadernos de anotações para organização de suas at
 ## Requisitos Funcionais
 
 - [x] Deve ser possível cadastrar um usuário
-- [ ] Deve ser possível acessar os cadernos de um usuário
-- [ ] Deve ser possível deletar um usuário
-- [ ] Deve ser possível criar cadernos de anotações 
-- [ ] Deve ser possível criar anotações dentro de um caderno
-- [ ] Deve ser possível editar um caderno de anotação (Alterar o título, criar novas anotações, deletar anotações criadas, tornar uma anotação como feita, finalizar/arquivar um caderno de anotação)
-- [ ] Deve ser possível deletar um caderno de anotação
+- [x] Deve ser possível acessar os cadernos de um usuário
+- [x] Deve ser possível deletar um usuário
+- [x] Deve ser possível criar cadernos de anotações 
+- [x] Deve ser possível criar anotações dentro de um caderno
+- [ ] Deve ser possível editar um caderno de anotação (Alterar o título, criar novas anotações, deletar anotações criadas, tornar uma anotação como feita, finalizar um caderno de anotação)
+- [x] Deve ser possível deletar um caderno de anotação
 - [ ] OPCIONAL: Deve ser possível determinar uma data e hora limite de execução de um caderno
 
 ## Requisitos Não Funcionais
@@ -20,7 +20,7 @@ Aplicativo de criação de cadernos de anotações para organização de suas at
 
 ## Regras de Negócio
 
-- [ ] Podem ser cadastrados no máximo 5 usuários
+- [x] Podem ser cadastrados no máximo 5 usuários
 - [ ] Um usuário não poderá ter o mesmo nome que o outro
-- [ ] Um usuário poderá ter no máximo 10 cadernos em execução
-- [ ] Um caderno deve ter no máximo 10 anotações
+- [x] Um usuário poderá ter no máximo 10 cadernos em execução
+- [x] Um caderno deve ter no máximo 10 anotações

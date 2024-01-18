@@ -69,17 +69,20 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
 
     saveNotebookOnLocalStorage(formValues, id);
 
-    router.refresh();
+    window.location.reload();
   }
 
   return (
     <>
-      <Card className="w-[350px] flex flex-col items-center">
+      <Card className="w-[500px] flex flex-col items-center">
         <CardHeader>
           <CardTitle>Novo caderno de anotações</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleCreateNotebook} className="grid w-full items-center gap-4">
+          <form
+            onSubmit={handleCreateNotebook}
+            className="grid w-full items-center gap-4"
+          >
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <Input
@@ -94,7 +97,7 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
                     </Badge>
                   );
                 })}
-                {formValues?.name && (
+                {formValues?.name && formValues.tasks.length < 10 && (
                   <div className="flex">
                     <Input
                       id="task"

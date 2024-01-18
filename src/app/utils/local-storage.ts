@@ -127,3 +127,19 @@ export function createId(userId: string | null) {
 
   return ids[ids.length - 1] + 1;
 }
+
+export function deleteNotebook(userId: string, notebookId: number) {
+  const usersData: LocalStorageUserData[] = getUsersDataInLocalStorage();
+
+  usersData.forEach((userData: LocalStorageUserData) => {
+    if (userData.user.id === parseInt(userId)) {
+      userData.notebooks.forEach((notebook, index) => {
+        if (notebook.id === notebookId) {
+          userData.notebooks.splice(index, 1);
+        }
+      });
+    }
+  });
+
+  localStorage.setItem("ramonotesData", JSON.stringify(usersData));
+}
