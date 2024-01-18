@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  createId,
   createUserInLocalStorage,
+  deleteUserById,
   getUsersDataInLocalStorage,
 } from "@/app/utils/local-storage";
 import { LocalStorageUserData, User } from "@/app/utils/types";
@@ -15,7 +15,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { Separator } from "../ui/separator";
@@ -47,6 +46,12 @@ export function UsersCard() {
     }));
   }
 
+  function handleDeleteUser(id: number) {
+    deleteUserById(id);
+
+    window.location.reload();
+  }
+
   return (
     <div className="flex flex-col gap-10">
       {users && users.length > 0 && (
@@ -60,6 +65,14 @@ export function UsersCard() {
                   className="w-[350px] flex flex-col items-center"
                   key={`${user.user.name}-login-card`}
                 >
+                  <div className="w-full flex justify-end h-0">
+                    <Button
+                      variant="ghost"
+                      onClick={() => handleDeleteUser(user.user.id as number)}
+                    >
+                      x
+                    </Button>
+                  </div>
                   <CardHeader>
                     <CardTitle>{user.user.name}</CardTitle>
                   </CardHeader>
@@ -98,17 +111,20 @@ export function UsersCard() {
             <CardTitle>Criar novo usuário</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleCreateUser} className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Input
-                    id="name"
-                    placeholder="Nome do usuário"
-                    onChange={handleChange}
-                  />
-                </div>
-                <Button variant="outline" type="submit">
-                  Criar
-                </Button>
+            <form
+              onSubmit={handleCreateUser}
+              className="grid w-full items-center gap-4"
+            >
+              <div className="flex flex-col space-y-1.5">
+                <Input
+                  id="name"
+                  placeholder="Nome do usuário"
+                  onChange={handleChange}
+                />
+              </div>
+              <Button variant="outline" type="submit">
+                Criar
+              </Button>
             </form>
           </CardContent>
         </Card>

@@ -9,14 +9,27 @@ import { Separator } from "@/components/ui/separator";
 export default function UserHomePage({ params }: { params: { id: string } }) {
   const user: LocalStorageUserData = getUserById(params.id);
 
+  const filterNotebooks = (type: "finished" | "notFinished") => {
+    const notebookTypes = {
+      finished: user.notebooks.filter((notebook) => notebook.done),
+      notFinished: user.notebooks.filter((notebook) => !notebook.done),
+    };
+
+    return notebookTypes[type];
+  };
+
   return (
     <div className="flex flex-col px-10">
       <div className="mt-20 mb-20 text-center">
         <h2 className="text-3xl font-bold mb-10">Olá, {user.user.name}!</h2>
         {user?.notebooks?.length > 0 ? (
           <h4 className="font-thin">
-            {`Hoje, você possui ${user.notebooks.length} ${
-              user.notebooks.length === 1 ? "caderno" : "cadernos"
+            {`Atualmente, você possui ${
+              filterNotebooks("notFinished").length
+            } ${
+              filterNotebooks("notFinished").length === 1
+                ? "caderno"
+                : "cadernos"
             } em progresso`}
           </h4>
         ) : (
@@ -27,15 +40,30 @@ export default function UserHomePage({ params }: { params: { id: string } }) {
       </div>
 
       <div className="flex flex-col gap-10">
-        {user.notebooks.length > 0 && (
+        {filterNotebooks("notFinished").length > 0 && (
           <section className="flex flex-col gap-3">
-            <h3 className="text-xl font-bold">Cadernos de anotação</h3>
+            <h3 className="text-xl font-bold">Cadernos de anotação em progresso</h3>
             <Separator />
-            <NotebooksCard id={params.id} />
+            <NotebooksCard
+              id={params.id}
+              notebooks={filterNotebooks("notFinished")}
+            />
           </section>
         )}
 
-        <section className="flex flex-col gap-3">
+        {filterNotebooks("finished").length > 0 && (
+          <section className="flex flex-col gap-3">
+            <h3 className="text-xl font-bold">Cadernos de anotação finalizados</h3>
+            <Separator />
+            <NotebooksCard
+              id={params.id}
+              notebooks={filterNotebooks("finished")}
+              type="finished"
+            />
+          </section>
+        )}
+
+        <section className="flex flex-col gap-3 mb-20">
           <h3 className="text-xl font-bold">
             Que tal criar um novo caderno de anotação?
           </h3>

@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/header';
+import { BackButton } from '@/components/back-button';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,6 +29,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
+            <BackButton />
             {children}
           </ThemeProvider>
         </body>

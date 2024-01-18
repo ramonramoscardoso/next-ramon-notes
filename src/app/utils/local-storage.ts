@@ -43,6 +43,18 @@ export const getUserById = (id: string) => {
   }
 };
 
+export function deleteUserById(id: number) {
+  const users: LocalStorageUserData[] = getUsersDataInLocalStorage();
+
+  if (!users) {
+    return;
+  }
+
+  const filteredUsers = users.filter((user) => user.user.id !== id);
+
+  localStorage.setItem("ramonotesData", JSON.stringify(filteredUsers));
+}
+
 export function saveNotebookOnLocalStorage(notebook: Notebook, userId: string) {
   const usersData = getUsersDataInLocalStorage();
 
@@ -112,8 +124,6 @@ export function createId(userId: string | null) {
 
     ids = data.map((user: LocalStorageUserData) => user.user.id).sort();
   }
-
-  
 
   return ids[ids.length - 1] + 1;
 }

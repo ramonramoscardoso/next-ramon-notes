@@ -1,7 +1,6 @@
 "use client";
 
-import { getUserById } from "@/app/utils/local-storage";
-import { LocalStorageUserData, Notebook } from "@/app/utils/types";
+import { Notebook } from "@/app/utils/types";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,10 +13,11 @@ import { useRouter } from "next/navigation";
 
 interface NotebooksCardParams {
   id: string;
+  notebooks: Notebook[];
+  type?: "finished" | "notFinished";
 }
 
-export function NotebooksCard({ id }: NotebooksCardParams) {
-  const userData: LocalStorageUserData = getUserById(id);
+export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
   const router = useRouter();
 
   function createTasksDetailsSection(
@@ -35,25 +35,33 @@ export function NotebooksCard({ id }: NotebooksCardParams) {
               : "anotações finalizadas ✅"
           }`}
         </p>
-        <p>
-          {`${notFinishedTasksLength} ${
-            notFinishedTasksLength === 1
-              ? "anotação não finalizada ❌"
-              : "anotações não finalizadas ❌"
-          }`}
-        </p>
+        {type !== "finished" && (
+          <p>
+            {`${notFinishedTasksLength} ${
+              notFinishedTasksLength === 1
+                ? "anotação não finalizada ❌"
+                : "anotações não finalizadas ❌"
+            }`}
+          </p>
+        )}
       </div>
     );
   }
 
+  function getOpacity() {
+    if (type === "finished") return "opacity-30";
+
+    return "opacity-1";
+  }
+
   return (
     <>
-      {userData?.notebooks?.length > 0 && (
+      {notebooks?.length > 0 && (
         <div className="grid grid-cols-3 place-items-stretch">
-          {userData.notebooks.map((notebook) => {
+          {notebooks.map((notebook) => {
             return (
               <Card
-                className="w-[350px] flex flex-col items-center"
+                className={`w-[350px] flex flex-col items-center ${getOpacity()}`}
                 key={`${notebook.name}-notebook-card`}
               >
                 <CardHeader>

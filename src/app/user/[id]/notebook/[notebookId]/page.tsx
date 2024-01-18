@@ -1,6 +1,9 @@
 "use client";
 
-import { updateNotebookOnLocalStorage, userNotebook } from "@/app/utils/local-storage";
+import {
+  updateNotebookOnLocalStorage,
+  userNotebook,
+} from "@/app/utils/local-storage";
 import { Notebook } from "@/app/utils/types";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +18,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { PenLine, Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface EditInput {
   index: number;
@@ -32,6 +36,8 @@ export default function NotebookPage({
   );
   const [editInput, setEditInput] = useState<EditInput | null>(null);
   const [newTaskInput, setNewTaskInput] = useState<string>("");
+
+  const router = useRouter();
 
   function handleCheckNote(index: number, checked: boolean) {
     const notebookCopy = { ...notebook };
@@ -67,12 +73,16 @@ export default function NotebookPage({
   }
 
   function handleSaveChanges() {
-    updateNotebookOnLocalStorage(notebook, params.id, params.notebookId)
+    updateNotebookOnLocalStorage(notebook, params.id, params.notebookId);
+
+    router.replace(`/user/${params.id}`);
   }
 
-  // useEffect(() => {
-  //   console.log(notebook);
-  // }, [notebook]);
+  function handleFinishNotebook() {
+    updateNotebookOnLocalStorage({...notebook, done: true}, params.id, params.notebookId);
+
+    router.replace(`/user/${params.id}`);
+  }
 
   return (
     <>
@@ -87,7 +97,7 @@ export default function NotebookPage({
             <CardContent className="flex flex-col gap-5">
               {notebook.tasks.map((task, index) => {
                 return (
-                  <div key={`task-${index}`} className="flex gap-3">
+                  <div key={`task-${index}`} className="flex gap-5 items-center">
                     <Checkbox
                       checked={task.done}
                       onCheckedChange={(value: CheckedState) =>
@@ -118,7 +128,7 @@ export default function NotebookPage({
                   </div>
                 );
               })}
-              <div className="flex gap-3">
+              <div className="flex gap-5">
                 <Input
                   id="task"
                   placeholder="Digite uma nova tarefa"
@@ -137,7 +147,7 @@ export default function NotebookPage({
             </CardContent>
             <CardFooter className="flex gap-3">
               {getUnmarkedNotes().length === 0 && (
-                <Button>Finalizar Caderno de Anotações</Button>
+                <Button onClick={handleFinishNotebook}>Finalizar Caderno de Anotações</Button>
               )}
               <Button onClick={handleSaveChanges}>Salvar alterações</Button>
             </CardFooter>
