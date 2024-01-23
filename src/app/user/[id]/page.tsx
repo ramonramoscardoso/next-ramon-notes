@@ -69,7 +69,7 @@ export default function UserHomePage({ params }: { params: { id: string } }) {
               </section>
             )}
 
-            <section className="flex flex-col gap-3 mb-20">
+            <section className="flex flex-col items-center gap-3 mb-20">
               <h3 className="text-xl font-bold">
                 Que tal criar um novo caderno de anotação?
               </h3>

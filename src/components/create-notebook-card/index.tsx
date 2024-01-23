@@ -74,7 +74,7 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
 
   return (
     <>
-      <Card className="min-[600px]:w-[500px] w-[350px] flex flex-col items-center">
+      <Card className="min-[600px]:w-[500px] w-[300px] flex flex-col items-center">
         <CardHeader>
           <CardTitle>Novo caderno de anotações</CardTitle>
         </CardHeader>
