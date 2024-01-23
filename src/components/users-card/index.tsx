@@ -132,7 +132,7 @@ export function UsersCard() {
     return (
       <>
         {!users || users?.length < 5 ? (
-          <Card className="w-[500px] flex flex-col items-center">
+          <Card className="min-[600px]:w-[500px] w-[350px] flex flex-col items-center">
             <CardHeader>
               <CardTitle>Criar novo usuário</CardTitle>
             </CardHeader>
@@ -169,7 +169,7 @@ export function UsersCard() {
         <section className="flex flex-col gap-3">
           <h3 className="text-xl font-bold">Usuários</h3>
           <Separator />
-          <div className="grid grid-cols-3 gap-5 place-items-center">
+          <div className="grid min-[1200px]:grid-cols-3 md:grid-cols-2 gap-5 place-items-center">
             {users.map((user) => {
               return (
                 <div key={`user-${user.user.id}`}>

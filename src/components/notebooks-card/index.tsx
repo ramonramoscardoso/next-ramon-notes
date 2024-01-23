@@ -1,5 +1,6 @@
 "use client";
 
+import { dateDifferenceFromToday } from "@/app/utils/dayjs";
 import { deleteNotebook } from "@/app/utils/local-storage";
 import { Notebook } from "@/app/utils/types";
 import { Button } from "@/components/ui/button";
@@ -65,9 +66,17 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
     return "opacity-1";
   }
 
+  function getBorderColor(date: string) {
+    const dateDifference = dateDifferenceFromToday(date);
+
+    if (dateDifference > 1) return "";
+
+    return "border-red-500";
+  }
+
   function notebookCard(notebook: Notebook) {
     return (
-      <Card className={`w-[350px] flex flex-col items-center ${getOpacity()}`}>
+      <>
         <div className="w-full flex justify-end h-0">
           <Button
             variant="ghost"
@@ -76,25 +85,36 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
             <Trash2 size={15} />
           </Button>
         </div>
-        <CardHeader>
-          <CardTitle>{notebook.name}</CardTitle>
-        </CardHeader>
-        {notebook.tasks.length > 0 ? (
-          <CardContent>{createTasksDetailsSection(notebook.tasks)}</CardContent>
-        ) : (
-          <CardContent>Nenhuma anotação ainda 📋</CardContent>
-        )}
-        <CardFooter className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={() => {
-              router.push(`/user/${id}/notebook/${notebook.id}`);
-            }}
-          >
-            Abrir caderno
-          </Button>
-        </CardFooter>
-      </Card>
+        <Card
+          className={`w-[350px] min-h-[300px] flex flex-col justify-center items-center ${getOpacity()} ${getBorderColor(
+            notebook.date as string
+          )}`}
+        >
+          <CardHeader>
+            <CardTitle>{notebook.name}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {notebook.tasks.length > 0 ? (
+              <>{createTasksDetailsSection(notebook.tasks)}</>
+            ) : (
+              <p className="text-center">Nenhuma anotação ainda 📋</p>
+            )}
+            <p className="mt-5">
+              Data para conclusão: {notebook.date.toString()}
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button
+              variant="outline"
+              onClick={() => {
+                router.push(`/user/${id}/notebook/${notebook.id}`);
+              }}
+            >
+              Abrir caderno
+            </Button>
+          </CardFooter>
+        </Card>
+      </>
     );
   }
 
@@ -128,7 +148,7 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
   return (
     <>
       {notebooks?.length > 0 && (
-        <div className="grid grid-cols-3 gap-5 place-items-center">
+        <div className="grid min-[1200px]:grid-cols-3 md:grid-cols-2 gap-5 place-items-center">
           {notebooks.map((notebook) => {
             return (
               <div key={`notebook-${notebook.id}`}>

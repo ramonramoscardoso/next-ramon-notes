@@ -1,3 +1,4 @@
+import { dateToDDMMYYYY } from "./dayjs";
 import { LocalStorageUserData, Notebook, User } from "./types";
 
 export function createUserInLocalStorage(userData: User) {
@@ -60,7 +61,7 @@ export function saveNotebookOnLocalStorage(notebook: Notebook, userId: string) {
 
   usersData.forEach((userData: LocalStorageUserData) => {
     if (userData.user.id === parseInt(userId)) {
-      userData.notebooks.push(notebook);
+      userData.notebooks.push(treatedNotebook(notebook));
     }
   });
 
@@ -142,4 +143,10 @@ export function deleteNotebook(userId: string, notebookId: number) {
   });
 
   localStorage.setItem("ramonotesData", JSON.stringify(usersData));
+}
+
+const treatedNotebook = (notebook: Notebook) => {
+  const transformed = {...notebook, date: dateToDDMMYYYY(notebook.date)}
+
+  return transformed
 }

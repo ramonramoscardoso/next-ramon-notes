@@ -9,14 +9,14 @@ Aplicativo de criação de cadernos de anotações para organização de suas at
 - [x] Deve ser possível deletar um usuário
 - [x] Deve ser possível criar cadernos de anotações 
 - [x] Deve ser possível criar anotações dentro de um caderno
-- [ ] Deve ser possível editar um caderno de anotação (Alterar o título, criar novas anotações, deletar anotações criadas, tornar uma anotação como feita, finalizar um caderno de anotação)
+- [x] Deve ser possível editar um caderno de anotação
 - [x] Deve ser possível deletar um caderno de anotação
-- [ ] OPCIONAL: Deve ser possível determinar uma data e hora limite de execução de um caderno
+- [x] OPCIONAL: Deve ser possível determinar uma data limite de execução de um caderno
 
 ## Requisitos Não Funcionais
 
 - [x] As anotações deverão ser guardadas no local storage do navegador 
-- [ ] O app deverá ser responsivo
+- [x] O app deverá ser responsivo
 
 ## Regras de Negócio
 

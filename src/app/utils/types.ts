@@ -11,6 +11,7 @@ export interface LocalStorageUserData {
 export interface Notebook {
   id: number;
   name: string;
+  date: Date | string;
   tasks: Task[];
   done: boolean;
 }

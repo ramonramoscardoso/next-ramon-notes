@@ -99,6 +99,7 @@ export default function NotebookPage({
           <Card className="w-[900px]">
             <CardHeader>
               <CardTitle>{notebook.name}</CardTitle>
+              <span className="font-thin mt-10">Data para conclusão: {notebook.date.toString()}</span>
             </CardHeader>
             <CardContent className="flex flex-col gap-5">
               {notebook.tasks.map((task, index) => {

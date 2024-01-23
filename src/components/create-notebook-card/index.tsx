@@ -2,22 +2,16 @@
 
 import { Notebook } from "@/app/utils/types";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Check } from "lucide-react";
 import { Badge } from "../ui/badge";
 import {
   createId,
   saveNotebookOnLocalStorage,
 } from "@/app/utils/local-storage";
-import { useRouter } from "next/navigation";
+import { DatePicker } from "../date-picker";
 
 interface CreateNotebookCardParams {
   id: string;
@@ -29,10 +23,9 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
     name: "",
     tasks: [],
     done: false,
+    date: new Date(),
     id: createId(id),
   });
-
-  const router = useRouter();
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = event.target;
@@ -47,6 +40,13 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
     const { value } = event.target;
 
     setTaskInput(value);
+  }
+
+  function handleDateChange(date: Date) {
+    setFormValues((values) => ({
+      ...values,
+      date,
+    }));
   }
 
   function handleCreateTask() {
@@ -74,7 +74,7 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
 
   return (
     <>
-      <Card className="w-[500px] flex flex-col items-center">
+      <Card className="min-[600px]:w-[500px] w-[350px] flex flex-col items-center">
         <CardHeader>
           <CardTitle>Novo caderno de anotações</CardTitle>
         </CardHeader>
@@ -85,10 +85,16 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
           >
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
+                <span className="text-sm">Título do caderno</span>
                 <Input
                   id="name"
-                  placeholder="Título do caderno"
+                  placeholder="Título"
                   onChange={handleChange}
+                />
+                <DatePicker
+                  value={formValues.date}
+                  setValue={handleDateChange}
+                  label="Data de conclusão"
                 />
                 {formValues.tasks.map((task, index) => {
                   return (
@@ -98,21 +104,23 @@ export function CreateNotebookCard({ id }: CreateNotebookCardParams) {
                   );
                 })}
                 {formValues?.name && formValues.tasks.length < 10 && (
-                  <div className="flex">
-                    <Input
-                      id="task"
-                      placeholder="Digite uma tarefa"
-                      value={taskInput}
-                      onChange={handleTaskInputChange}
-                    />
-                    <Button
-                      variant="outline"
-                      onClick={handleCreateTask}
-                      type="button"
-                    >
-                      <Check />
-                    </Button>
-                  </div>
+                  <>
+                    <div className="flex">
+                      <Input
+                        id="task"
+                        placeholder="Digite uma tarefa"
+                        value={taskInput}
+                        onChange={handleTaskInputChange}
+                      />
+                      <Button
+                        variant="outline"
+                        onClick={handleCreateTask}
+                        type="button"
+                      >
+                        <Check />
+                      </Button>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
