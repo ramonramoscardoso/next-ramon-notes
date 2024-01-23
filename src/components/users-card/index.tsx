@@ -67,7 +67,7 @@ export function UsersCard() {
   function userCard(user: LocalStorageUserData) {
     return (
       <Card
-        className="w-[350px] flex flex-col items-center"
+        className="min-[600px]:w-[350px] w-[250px] flex flex-col items-center"
         key={`${user.user.name}-login-card`}
       >
         <div className="w-full flex justify-end h-0">
@@ -108,7 +108,7 @@ export function UsersCard() {
   function userDeleteCard(user: LocalStorageUserData) {
     return (
       <Card
-        className="w-[350px] flex flex-col items-center bg-rose-700"
+        className="min-[600px]:w-[350px] w-[250px] flex flex-col items-center bg-rose-700"
         key={`${user.user.name}-login-card`}
       >
         <CardHeader>
@@ -141,7 +141,7 @@ export function UsersCard() {
     return (
       <>
         {!users || users?.length < 5 ? (
-          <Card className="min-[600px]:w-[500px] w-[350px] flex flex-col items-center">
+          <Card className="min-[600px]:w-[500px] w-[250px] flex flex-col items-center">
             <CardHeader>
               <CardTitle>Criar novo usuário</CardTitle>
             </CardHeader>
@@ -206,7 +206,7 @@ export function UsersCard() {
         </section>
       )}
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3 items-center">
         <h3 className="text-xl font-bold">Deseja criar um novo usuário?</h3>
         <Separator />
         {newUserSection()}

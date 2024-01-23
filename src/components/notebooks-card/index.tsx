@@ -94,7 +94,7 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
           </Button>
         </div>
         <Card
-          className={`w-[350px] min-h-[320px] flex flex-col justify-center items-center ${getOpacity()} ${getBorderColor(
+          className={`min-[600px]:w-[350px] w-[250px] min-h-[320px] flex flex-col justify-center items-center ${getOpacity()} ${getBorderColor(
             notebook.date as string,
             notebook.done
           )}`}
@@ -136,7 +136,7 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
 
   function notebookDeleteCard(notebook: Notebook) {
     return (
-      <Card className="w-[350px] flex flex-col items-center bg-rose-700">
+      <Card className="min-[600px]:w-[350px] w-[250px] flex flex-col items-center bg-rose-700">
         <CardHeader>
           Tem certeza que deseja deletar o caderno {notebook.name}?
         </CardHeader>
