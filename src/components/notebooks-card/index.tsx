@@ -66,12 +66,20 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
     return "opacity-1";
   }
 
-  function getBorderColor(date: string) {
+  function getBorderColor(date: string, done: boolean) {
     const dateDifference = dateDifferenceFromToday(date);
 
-    if (dateDifference > 1) return "";
+    if (dateDifference > 1 || done) return "";
 
-    return "border-red-500";
+    return "border-4 border-red-500";
+  }
+
+  function getLateNotebookText(date: string) {
+    const dateDifference = dateDifferenceFromToday(date);
+
+    if (dateDifference < 0) return <>🚨 Caderno atrasado!</>
+
+    return <>🚨 Falta pouco tempo para finalizar!</>
   }
 
   function notebookCard(notebook: Notebook) {
@@ -86,8 +94,9 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
           </Button>
         </div>
         <Card
-          className={`w-[350px] min-h-[300px] flex flex-col justify-center items-center ${getOpacity()} ${getBorderColor(
-            notebook.date as string
+          className={`w-[350px] min-h-[320px] flex flex-col justify-center items-center ${getOpacity()} ${getBorderColor(
+            notebook.date as string,
+            notebook.done
           )}`}
         >
           <CardHeader>
@@ -99,9 +108,16 @@ export function NotebooksCard({ id, notebooks, type }: NotebooksCardParams) {
             ) : (
               <p className="text-center">Nenhuma anotação ainda 📋</p>
             )}
-            <p className="mt-5">
-              Data para conclusão: {notebook.date.toString()}
-            </p>
+            {!notebook.done && (
+              <div className="text-center">
+                {dateDifferenceFromToday(notebook.date.toString()) <= 1 && (
+                  <p className="mt-5">{getLateNotebookText(notebook.date.toString())}</p>
+                )}
+                <p className="mt-5">
+                  Data para conclusão: {notebook.date.toString()}
+                </p>
+              </div>
+            )}
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button

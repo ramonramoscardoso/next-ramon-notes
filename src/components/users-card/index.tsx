@@ -3,6 +3,7 @@
 import {
   createUserInLocalStorage,
   deleteUserById,
+  getUserByName,
   getUsersDataInLocalStorage,
 } from "@/app/utils/local-storage";
 import { LocalStorageUserData, User } from "@/app/utils/types";
@@ -24,6 +25,7 @@ export function UsersCard() {
   const [formValues, setFormValues] = useState<User>();
   const [users, setUsers] = useState<LocalStorageUserData[]>();
   const [userDeleteId, setUserDeleteId] = useState<number | null>(null);
+  const [alertUserName, setAlertUserName] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -35,6 +37,13 @@ export function UsersCard() {
     event.preventDefault();
 
     if (formValues) {
+      const checkUsername = getUserByName(formValues.name);
+
+      if (checkUsername) {
+        setAlertUserName(true);
+        return;
+      }
+
       const userId = createUserInLocalStorage(formValues);
       router.push(`/user/${userId}`);
     }
@@ -137,27 +146,39 @@ export function UsersCard() {
               <CardTitle>Criar novo usuário</CardTitle>
             </CardHeader>
             <CardContent>
-              <form
-                onSubmit={handleCreateUser}
-                className="grid w-full items-center gap-4"
-              >
-                <div className="flex flex-col space-y-1.5">
-                  <Input
-                    id="name"
-                    placeholder="Nome do usuário"
-                    onChange={handleChange}
-                  />
-                </div>
-                <Button variant="outline" type="submit">
-                  Criar
-                </Button>
-              </form>
+              {!alertUserName ? (
+                <form
+                  onSubmit={handleCreateUser}
+                  className="grid w-full items-center gap-4"
+                >
+                  <div className="flex flex-col space-y-1.5">
+                    <Input
+                      id="name"
+                      placeholder="Nome do usuário"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <Button variant="outline" type="submit">
+                    Criar
+                  </Button>
+                </form>
+              ) : (
+                <>
+                  <div className="flex flex-col space-y-1.5">
+                    <span>Usuário já existe!</span>
+                    <Button
+                      variant="outline"
+                      onClick={() => setAlertUserName(false)}
+                    >
+                      Ok
+                    </Button>
+                  </div>
+                </>
+              )}
             </CardContent>
           </Card>
         ) : (
-          <>
-            🚨 Máximo de 5 usuários atingido! 
-          </>
+          <>🚨 Máximo de 5 usuários atingido!</>
         )}
       </>
     );

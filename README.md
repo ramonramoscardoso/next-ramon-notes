@@ -21,6 +21,6 @@ Aplicativo de criação de cadernos de anotações para organização de suas at
 ## Regras de Negócio
 
 - [x] Podem ser cadastrados no máximo 5 usuários
-- [ ] Um usuário não poderá ter o mesmo nome que o outro
+- [x] Um usuário não poderá ter o mesmo nome que o outro
 - [x] Um usuário poderá ter no máximo 10 cadernos em execução
 - [x] Um caderno deve ter no máximo 10 anotações

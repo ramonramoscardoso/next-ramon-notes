@@ -20,12 +20,14 @@ export function createUserInLocalStorage(userData: User) {
 }
 
 export function getUsersDataInLocalStorage() {
-  const usersData = localStorage.getItem("ramonotesData");
+  if (typeof window !== "undefined") {
+    const usersData = localStorage.getItem("ramonotesData");
 
-  if (!usersData) {
-    return null;
+    if (!usersData) {
+      return null;
+    }
+    return JSON.parse(usersData);
   }
-  return JSON.parse(usersData);
 }
 
 export const getUserById = (id: string) => {
@@ -39,6 +41,20 @@ export const getUserById = (id: string) => {
     return users.find(
       (user: LocalStorageUserData) => user.user.id === parseInt(id)
     );
+  } catch {
+    return null;
+  }
+};
+
+export const getUserByName = (name: string) => {
+  const users = getUsersDataInLocalStorage();
+
+  if (!users) {
+    return null;
+  }
+
+  try {
+    return users.find((user: LocalStorageUserData) => user.user.name === name);
   } catch {
     return null;
   }
@@ -95,6 +111,8 @@ export const userNotebook = (
 ) => {
   const userData = getUserById(userId);
 
+  if (!userData) return false;
+
   if (!notebookId) {
     return userData.notebooks;
   }
@@ -146,7 +164,7 @@ export function deleteNotebook(userId: string, notebookId: number) {
 }
 
 const treatedNotebook = (notebook: Notebook) => {
-  const transformed = {...notebook, date: dateToDDMMYYYY(notebook.date)}
+  const transformed = { ...notebook, date: dateToDDMMYYYY(notebook.date) };
 
-  return transformed
-}
+  return transformed;
+};
